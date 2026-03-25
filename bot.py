@@ -3,14 +3,14 @@ from aiogram import Bot, Dispatcher
 from services.database.database import init_db
 from config import BOT_TOKEN
 
-from handlers.commands import user, cmd_start
+from handlers.commands import user
 
 
 async def main():
     bot = Bot(BOT_TOKEN)
     dp = Dispatcher()
-    dp.startup.register(on_startup)
     dp.include_router(user)
+    dp.startup.register(on_startup)
     await dp.start_polling(bot)
 
 
