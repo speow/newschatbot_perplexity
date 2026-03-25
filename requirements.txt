@@ -1,0 +1,4 @@
+# Project requirements. Install by command: pip install -r requirements.txt
+aiogram==3.26.0
+python-dotenv==1.2.2
+aiosqlite==0.22.1
