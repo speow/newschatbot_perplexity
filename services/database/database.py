@@ -1,5 +1,5 @@
 import aiosqlite
-import asyncio
+
 from config import DB_PATH
 
 

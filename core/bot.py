@@ -1,9 +1,10 @@
 import asyncio
-from aiogram import Bot, Dispatcher
-from services.database.database import init_db
-from config import BOT_TOKEN
 
+from aiogram import Bot, Dispatcher
+
+from config import BOT_TOKEN
 from handlers.commands import user
+from services.database.database import init_db
 
 
 async def main():
