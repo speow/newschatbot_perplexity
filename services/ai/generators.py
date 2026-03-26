@@ -6,6 +6,4 @@ client = AsyncClient(host=LLM_URL, timeout=60)
 
 
 async def generate(user_prompt: str, model: str = LLM_MODEL, system_prompt: str = SYSTEM_PROMPT):
-    print(system_prompt)
     response = await client.generate(model=model, prompt=system_prompt + user_prompt)
-    print(response.response)
