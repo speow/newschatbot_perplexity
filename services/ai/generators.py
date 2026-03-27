@@ -20,6 +20,6 @@ async def generate(
         Возвращает список словарей, содержащих информацию по каждой новости
     """
 
-    response = await client.generate(model=model, prompt=user_prompt, system=system_prompt)
+    response = await client.generate(model=model, prompt=system_prompt + user_prompt)
     news: list[dict[str, str]] = json.loads(response.response)
     return news

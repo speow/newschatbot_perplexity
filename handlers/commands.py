@@ -1,9 +1,11 @@
 from aiogram import Router
 from aiogram.filters import Command, CommandStart
 from aiogram.types import Message
+from aiogram.utils.formatting import Text
 
-from services.database.database import add_user
 from services.ai.generators import generate
+from services.database.database import add_user
+from services.formatter.news_formatter import NewsFormatter
 
 user = Router()
 
@@ -19,5 +21,8 @@ async def cmd_start(message: Message):
 
 @user.message(Command("news"))
 async def cmd_news(message: Message):
-    prompt = message.text.replace("/news", "", 1).strip()
-    await message.answer(str(await generate(prompt)))
+    prompt: str = message.text.replace("/news", "", 1).strip()
+    formatter = NewsFormatter()
+    generated_result = await generate(prompt)
+    content: list[Text] = await formatter.text_processing(generated_result)
+    await message.answer(**content[0].as_kwargs())
