@@ -20,3 +20,4 @@ async def cmd_start(message: Message):
 @user.message(Command("news"))
 async def cmd_news(message: Message):
     prompt = message.text.lstrip("/news")
+    await message.answer(str(await generate(prompt)))
