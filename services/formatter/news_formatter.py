@@ -1,4 +1,4 @@
-from aiogram.utils.formatting import Text, Bold, Url
+from aiogram.utils.formatting import Text, Bold, Url, Italic
 
 
 class NewsFormatter:
@@ -18,11 +18,11 @@ class NewsFormatter:
                     Bold(news[i]["title"]),
                     "\n\n",
                     news[i]["summary"],
-                    f"\n\nИсточник: {news[i]['source']}\n",
-                    "Ссылка на источник: ",
+                    Italic(f"\n\nИсточник: {news[i]['source']}\n"),
+                    Italic("Ссылка на источник: "),
                     Url(news[i]["url"]),
                     "\n",
-                    f"Дата публикации новости: {news[i]['published']}",
+                    Italic(f"Дата публикации новости: {news[i]['published']}"),
                 )
             )
 
