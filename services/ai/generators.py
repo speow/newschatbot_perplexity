@@ -1,10 +1,13 @@
 import json
 
 from ollama import AsyncClient
+import logging
 
 from config import LLM_MODEL, LLM_URL, SYSTEM_PROMPT
 
 client = AsyncClient(host=LLM_URL, timeout=60)
+
+logger = logging.getLogger(__name__)
 
 
 async def generate(
@@ -20,6 +23,22 @@ async def generate(
         Возвращает список словарей, содержащих информацию по каждой новости
     """
 
-    response = await client.generate(model=model, prompt=system_prompt + user_prompt)
-    news: list[dict[str, str]] = json.loads(response.response)
-    return news
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            response = await client.generate(model=model, system=SYSTEM_PROMPT, prompt=user_prompt)
+            print(response.response)
+            if not response.response:
+                logger.warning("Пустой ответ от модели. Производится повторный запрос.")
+
+            news: list[dict[str, str]] = json.loads(response.response)
+
+            if not news:
+                logger.warning("Пустой список новостей. Выполняется повторный запрос.")
+
+            return news
+
+        except json.JSONDecodeError as e:
+            logger.error(f"Ошибка парсинга JSON: {e}.")
+        except Exception as e:
+            logger.error(f"Ошибка генерации: {e}.")

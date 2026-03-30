@@ -25,4 +25,7 @@ async def cmd_news(message: Message):
     formatter = NewsFormatter()
     generated_result = await generate(prompt)
     content: list[Text] = await formatter.text_processing(generated_result)
-    await message.answer(**content[0].as_kwargs())
+    if content:
+        await message.answer(**content[0].as_kwargs())
+    else:
+        await message.answer("К сожалению, новости получить не удалось. Попробуйте еще раз.")
