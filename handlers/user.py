@@ -5,7 +5,7 @@ from aiogram.types import CallbackQuery, Message
 
 from keyboards.news_pagination import get_pagination_keyboard
 from services.ai.generators import generate
-from services.database.database import add_user
+from services.database.database import add_user, add_request
 from services.formatter.news_formatter import NewsFormatter
 from states import NewsStates
 
@@ -26,6 +26,8 @@ async def cmd_news(message: Message, state: FSMContext):
     prompt: str = message.text.replace("/news", "", 1).strip()
     news: list[dict[str, str]] = await generate(prompt)
 
+    await add_request(message.from_user.id, message.chat.id, prompt)
+
     if not news:
         await message.answer("К сожалению, новости получить не удалось. Попробуйте еще раз.")
         return
@@ -37,7 +39,7 @@ async def cmd_news(message: Message, state: FSMContext):
     await message.answer(**first_news_kwargs, reply_markup=get_pagination_keyboard(0, len(news)))
 
 
-@user.callback_query(F.data.in_({"news_prev", "news_next"}))
+@user.callback_query(NewsStates.browsing, F.data.in_({"news_prev", "news_next"}))
 async def news_pagination(callback: CallbackQuery, state: FSMContext):
     data = await state.get_data()
 
@@ -77,3 +79,8 @@ async def news_pagination(callback: CallbackQuery, state: FSMContext):
         pass
 
     await callback.answer()
+
+
+@user.callback_query(NewsStates.browsing, F.data == "news_source")
+async def news_source(callback: CallbackQuery, state: FSMContext):
+    pass

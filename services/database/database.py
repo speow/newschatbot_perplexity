@@ -76,3 +76,18 @@ async def add_user(user_id: int, full_name: str, username: str = None) -> bool:
             return True
         except aiosqlite.IntegrityError:
             return False
+
+
+async def add_request(user_id: int, chat_id: int, query_text: str) -> bool:
+    async with aiosqlite.connect(DB_PATH) as db:
+        try:
+            await db.execute(
+                """
+                INSERT INTO requests (user_id, chat_id, query_text) VALUES (?, ?, ?)
+            """,
+                (user_id, chat_id, query_text),
+            )
+            await db.commit()
+            return True
+        except aiosqlite.IntegrityError:
+            return False
