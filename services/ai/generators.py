@@ -1,7 +1,7 @@
 import json
+import logging
 
 from ollama import AsyncClient
-import logging
 
 from config import LLM_MODEL, LLM_URL, SYSTEM_PROMPT
 
