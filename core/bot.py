@@ -3,11 +3,12 @@ import asyncio
 from aiogram import Bot, Dispatcher
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
 from aiohttp import web
+from aiogram.fsm.storage.redis import RedisStorage
+import redis.asyncio as aioredis
 
 from config import BOT_TOKEN, HOST, PORT, WEBHOOK_URL
-from handlers.commands import user
+from handlers.user import user
 from services.database.database import init_db
-
 
 WEBHOOK_PATH = "/webhook"
 
@@ -23,8 +24,10 @@ async def on_shutdown(bot: Bot):
 
 
 async def main():
+    redis = await aioredis.from_url("redis:://localhost:6379/0")
+
     bot = Bot(BOT_TOKEN)
-    dp = Dispatcher()
+    dp = Dispatcher(storage=RedisStorage(redis))
 
     dp.include_router(user)
 
@@ -54,4 +57,5 @@ if __name__ == "__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
+        pass
         pass
