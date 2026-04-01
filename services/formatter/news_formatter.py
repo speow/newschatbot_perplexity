@@ -7,7 +7,8 @@ class NewsFormatter:
     def __init__(self):
         pass
 
-    async def text_processing(self, news: list[dict[str, str]]) -> list[Text]:
+    @staticmethod
+    async def text_processing(news: list[dict[str, str]]) -> list[Text]:
         """Возвращает отформатированный список новостей"""
 
         formatted_news: list[Text] = []
