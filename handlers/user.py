@@ -5,7 +5,7 @@ from aiogram.types import CallbackQuery, Message
 
 from keyboards.news_pagination import get_pagination_keyboard
 from services.ai.generators import generate
-from services.database.database import add_user, add_request
+from services.database.database import add_request, add_user
 from services.formatter.news_formatter import NewsFormatter
 from states import NewsStates
 
@@ -36,7 +36,7 @@ async def cmd_news(message: Message, state: FSMContext):
     await state.update_data(news=news, current_page=0)
 
     first_news_kwargs = NewsFormatter.format_as_kwargs(news[0])
-    await message.answer(**first_news_kwargs, reply_markup=get_pagination_keyboard(0, len(news)))
+    await message.answer(**first_news_kwargs, reply_markup=get_pagination_keyboard(0, len(news), news[0]["url"]))
 
 
 @user.callback_query(NewsStates.browsing, F.data.in_({"news_prev", "news_next"}))
@@ -72,15 +72,10 @@ async def news_pagination(callback: CallbackQuery, state: FSMContext):
     try:
         await callback.message.edit_text(
             text=kwargs.get("text", ""),
-            reply_markup=get_pagination_keyboard(new_page, total),
+            reply_markup=get_pagination_keyboard(new_page, total, news[new_page]["url"]),
             parse_mode=kwargs.get("parse_mode", "HTML"),
         )
     except Exception:
         pass
 
     await callback.answer()
-
-
-@user.callback_query(NewsStates.browsing, F.data == "news_source")
-async def news_source(callback: CallbackQuery, state: FSMContext):
-    pass

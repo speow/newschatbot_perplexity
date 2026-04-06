@@ -27,7 +27,6 @@ async def generate(
     for attempt in range(max_retries):
         try:
             response = await client.generate(model=model, system=SYSTEM_PROMPT, prompt=user_prompt)
-            print(response.response)
             if not response.response:
                 logger.warning("Пустой ответ от модели. Производится повторный запрос.")
 
