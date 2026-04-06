@@ -1,4 +1,5 @@
 import aiosqlite
+from datetime import datetime
 
 from config import DB_PATH
 
@@ -43,7 +44,6 @@ async def init_db():
                 url TEXT UNIQUE NOT NULL,
                 source_name TEXT NOT NULL,
                 published_at TEXT,
-                query_topic TEXT NOT NULL,
                 fetched_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """
@@ -91,3 +91,50 @@ async def add_request(user_id: int, chat_id: int, query_text: str) -> bool:
             return True
         except aiosqlite.IntegrityError:
             return False
+
+
+async def add_news_to_cache(news: list[dict[str, str]]) -> bool:
+    async with aiosqlite.connect(DB_PATH) as db:
+        data = [
+            (
+                item["title"],
+                item["summary"],
+                item["url"],
+                item["source"],
+                item["published"],
+                datetime.now().strftime("%H:%M:%S"),
+            )
+            for item in news
+        ]
+
+        await db.executemany(
+            """
+            INSERT OR IGNORE INTO news_cache
+            (title, summary, url, source_name, published_at, fetched_at)
+            VALUES (?, ?, ?, ?, ?, ?)
+            """,
+            data,
+        )
+
+        await db.commit()
+        return True
+        # for item in news:
+        #     try:
+        #         await db.execute(
+        #             """
+        #                 INSERT OR IGNORE INTO news_cache
+        #                 (title, summary, url, source_name, published_at, fetched_at)
+        #                 VALUES (?, ?, ?, ?, ?)
+        #             """,
+        #             (
+        #                 item["title"],
+        #                 item["summary"],
+        #                 item["url"],
+        #                 item["source_name"],
+        #                 item["published"],
+        #                 datetime.now().strftime("%H:%M:%S"),
+        #             ),
+        #         )
+
+        # await db.commit()
+        # return True

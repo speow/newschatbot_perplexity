@@ -2,6 +2,7 @@ import json
 import logging
 
 from ollama import AsyncClient
+from services.database.database import add_news_to_cache
 
 from config import LLM_MODEL, LLM_URL, SYSTEM_PROMPT
 
@@ -35,6 +36,7 @@ async def generate(
             if not news:
                 logger.warning("Пустой список новостей. Выполняется повторный запрос.")
 
+            await add_news_to_cache(news)
             return news
 
         except json.JSONDecodeError as e:
