@@ -71,9 +71,8 @@ async def news_pagination(callback: CallbackQuery, state: FSMContext):
 
     try:
         await callback.message.edit_text(
-            text=kwargs.get("text", ""),
+            **kwargs,
             reply_markup=get_pagination_keyboard(new_page, total, news[new_page]["url"]),
-            parse_mode=kwargs.get("parse_mode", "HTML"),
         )
     except Exception:
         pass

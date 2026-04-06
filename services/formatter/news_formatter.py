@@ -12,9 +12,6 @@ class NewsFormatter:
             "\n\n",
             news_item["summary"],
             Italic(f"\n\nИсточник: {news_item['source']}\n"),
-            Italic("Ссылка на источник: "),
-            Url(news_item["url"]),
-            "\n",
             Italic(f"Дата публикации новости: {news_item['published']}"),
         )
 
