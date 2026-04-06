@@ -102,7 +102,7 @@ async def add_news_to_cache(news: list[dict[str, str]]) -> bool:
                 item["url"],
                 item["source"],
                 item["published"],
-                datetime.now().strftime("%H:%M:%S"),
+                datetime.now().strftime("%Y-%m-%d %H:%M:%S %Z"),
             )
             for item in news
         ]
