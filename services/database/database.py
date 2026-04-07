@@ -16,6 +16,7 @@ async def init_db():
                 user_id INTEGER UNIQUE NOT NULL,
                 username TEXT,
                 full_name TEXT NOT NULL,
+                subscribed INTEGER DEFAULT 0,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """
@@ -102,7 +103,6 @@ async def add_news_to_cache(news: list[dict[str, str]]) -> bool:
                 item["url"],
                 item["source"],
                 item["published"],
-                datetime.now().strftime("%Y-%m-%d %H:%M:%S %Z"),
             )
             for item in news
         ]
@@ -110,31 +110,11 @@ async def add_news_to_cache(news: list[dict[str, str]]) -> bool:
         await db.executemany(
             """
             INSERT OR IGNORE INTO news_cache
-            (title, summary, url, source_name, published_at, fetched_at)
-            VALUES (?, ?, ?, ?, ?, ?)
+            (title, summary, url, source_name, published_at)
+            VALUES (?, ?, ?, ?, ?)
             """,
             data,
         )
 
         await db.commit()
         return True
-        # for item in news:
-        #     try:
-        #         await db.execute(
-        #             """
-        #                 INSERT OR IGNORE INTO news_cache
-        #                 (title, summary, url, source_name, published_at, fetched_at)
-        #                 VALUES (?, ?, ?, ?, ?)
-        #             """,
-        #             (
-        #                 item["title"],
-        #                 item["summary"],
-        #                 item["url"],
-        #                 item["source_name"],
-        #                 item["published"],
-        #                 datetime.now().strftime("%H:%M:%S"),
-        #             ),
-        #         )
-
-        # await db.commit()
-        # return True
