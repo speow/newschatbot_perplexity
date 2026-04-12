@@ -6,7 +6,7 @@ from aiogram.types import CallbackQuery, Message
 from keyboards.news_pagination import get_pagination_keyboard
 from services.ai.generators import generate
 from services.database.database import add_request, add_user
-from services.formatter.news_formatter import NewsFormatter
+from services.formatter.news_formatter import Formatter
 from states import NewsStates
 
 user = Router()
@@ -35,7 +35,7 @@ async def cmd_news(message: Message, state: FSMContext):
     await state.set_state(NewsStates.browsing)
     await state.update_data(news=news, current_page=0)
 
-    first_news_kwargs = NewsFormatter.format_as_kwargs(news[0])
+    first_news_kwargs = Formatter.format_as_kwargs(news[0])
     await message.answer(**first_news_kwargs, reply_markup=get_pagination_keyboard(0, len(news), news[0]["url"]))
 
 
@@ -67,7 +67,7 @@ async def news_pagination(callback: CallbackQuery, state: FSMContext):
 
     await state.update_data(current_page=new_page)
 
-    kwargs = NewsFormatter.format_as_kwargs(news[new_page])
+    kwargs = Formatter.format_as_kwargs(news[new_page])
 
     try:
         await callback.message.edit_text(

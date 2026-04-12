@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 async def generate(
-    user_prompt: str, model: str = LLM_MODEL, system_prompt: str = SYSTEM_PROMPT
+    user_prompt: str = "", model: str = LLM_MODEL, system_prompt: str = SYSTEM_PROMPT
 ) -> list[dict[str, str]]:
     """Генератор списка новостей по запросу пользователя
 
