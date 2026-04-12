@@ -7,10 +7,22 @@ import datetime
 
 
 async def send_digest():
-    digest: Text = await generate_digest()
+    if not DIGEST_CHANNEL_ID:
+        print("❌ DIGEST_CHANNEL_ID не установлен в переменных окружения")
+        return
+
+    digest: Text | list = await generate_digest()
 
     bot = Bot(token=BOT_TOKEN)
-    await bot.send_message(chat_id=DIGEST_CHANNEL_ID, **digest.as_kwargs())
+
+    # Если digest — это список (от digest_formate), объединяем элементы
+    if isinstance(digest, list):
+        digest_text = Text(*digest)
+    else:
+        digest_text = digest
+
+    # Конвертируем Text объект в строку с HTML форматированием
+    await bot.send_message(chat_id=DIGEST_CHANNEL_ID, text=digest_text.as_html(), parse_mode="HTML")
 
 
 async def generate_digest() -> Text:

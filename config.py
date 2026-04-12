@@ -19,7 +19,7 @@ PORT: str = os.getenv("PORT")
 WEBHOOK_URL: str = os.getenv("WEBHOOK_URL")
 
 # Scheduler configuration
-DIGEST_CHANNEL_ID: str = os.getenv("CHANNEL_ID")
+DIGEST_CHANNEL_ID: str = os.getenv("DIGEST_CHANNEL_ID")
 DIGEST_PROMPT: str = os.getenv("DIGEST_PROMPT")
 TIMEZONE: str = os.getenv("TIMEZONE")
 

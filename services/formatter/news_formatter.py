@@ -7,7 +7,7 @@ class Formatter:
 
     @staticmethod
     def digest_formate(digest: list[dict[str, str]]) -> Text:
-        digest_parts: list[Bold | Italic | Url] = [
+        formatted_digest: list = [
             Bold(f"Самые свежие новости из мира AI за {datetime.datetime.now().strftime('%Y-%m-%d')}!\n\n")
         ]
 
@@ -19,8 +19,10 @@ class Formatter:
                 Italic(f"\nИсточник: {part['source']}\n"),
                 Italic(f"Дата публикации новости: {part['published']}\n\n"),
             )
-            digest_parts.append(news_text)
-            digest_parts.append(Text("\n\n---\n\n"))
+            formatted_digest.append(news_text)
+            formatted_digest.append("\n\n---\n\n")
+
+        return Text(*formatted_digest)
 
     @staticmethod
     def dict_to_text(news_item: dict[str, str]) -> Text:

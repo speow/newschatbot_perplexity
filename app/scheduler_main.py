@@ -7,7 +7,7 @@ from services.scheduler.jobs import send_digest
 
 async def main():
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(send_digest, "cron", hour=19)
+    scheduler.add_job(send_digest, "cron", hour=19, minute=21)
     scheduler.start()
 
     try:
