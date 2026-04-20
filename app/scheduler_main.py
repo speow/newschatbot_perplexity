@@ -4,11 +4,14 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from services.scheduler.jobs import send_digest
 
+from config import DIGEST_HOURS, DIGEST_MINUTES
+
 
 async def main():
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(send_digest, "cron", hour=19, minute=21)
+    scheduler.add_job(send_digest, "cron", DIGEST_HOURS, DIGEST_MINUTES)
     scheduler.start()
+    print("Digest scheduler was started.")
 
     try:
         await asyncio.Event().wait()

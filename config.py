@@ -22,6 +22,8 @@ WEBHOOK_URL: str = os.getenv("WEBHOOK_URL")
 DIGEST_CHANNEL_ID: str = os.getenv("DIGEST_CHANNEL_ID")
 DIGEST_PROMPT: str = os.getenv("DIGEST_PROMPT")
 TIMEZONE: str = os.getenv("TIMEZONE")
+DIGEST_HOURS: int = os.getenv("DIGEST_HOURS")
+DIGEST_MINUTES: int = os.getenv("DIGEST_MINUTES")
 
 
 # List of variables to check for existence
