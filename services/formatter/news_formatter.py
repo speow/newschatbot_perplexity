@@ -181,28 +181,3 @@ class Formatter:
         """
         text_obj = Formatter.dict_to_text(news_item)
         return text_obj.as_kwargs()
-
-
-# Optional: Add helper method for batch formatting if needed
-class BatchFormatter(Formatter):
-    """
-    Extended formatter for batch operations on multiple news items.
-
-    This class inherits from Formatter and adds convenience methods
-    for formatting multiple news items at once.
-    """
-
-    @staticmethod
-    def format_multiple(news_items: List[Dict[str, str]]) -> List[Dict]:
-        """
-        Format multiple news items as kwargs in one operation.
-
-        Useful when you need to pre-format multiple articles for later use.
-
-        Args:
-            news_items: List of news article dictionaries
-
-        Returns:
-            List of kwargs dictionaries ready for message sending
-        """
-        return [Formatter.format_as_kwargs(item) for item in news_items]
