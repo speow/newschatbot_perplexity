@@ -11,7 +11,6 @@ from handlers.user import user
 from services.database.database import init_db
 
 WEBHOOK_PATH = "/webhook"
-PROXY_URL = "http://28NKhQgw:gq72qmQL@192.177.24.246:64912"
 
 
 async def on_startup(bot: Bot):
